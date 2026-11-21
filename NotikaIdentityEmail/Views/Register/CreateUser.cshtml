@@ -27,7 +27,7 @@
         </div>
 
         <div class="register-body">
-            <form asp-controller="Register" asp-action="Index" method="post" novalidate>
+            <form asp-controller="Register" asp-action="CreateUser" method="post" novalidate>
 
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small"></div>
 
@@ -78,12 +78,24 @@
                                 <i class="bi bi-eye"></i>
                             </button>
                         </div>
+                       
                         <div class="strength-bar"><span id="strengthFill"></span></div>
                         <div class="strength-text" id="strengthText">Şifre gücü</div>
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                 </div>
-
+                <div class="col-12">                   
+                    <label asp-for="ConfirmPassword" class="form-label">Şifre Tekrar</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control" id="confirmPasswordInput"
+                               placeholder="••••••••" autocomplete="new-password" />
+                        <button type="button" class="btn toggle-password" id="confirmTogglePassword" tabindex="-1">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>   
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
                 <button type="submit" class="btn btn-register w-100 mt-4">
                     <i class="bi bi-person-plus me-1"></i> Kayıt Ol
                 </button>
@@ -101,10 +113,24 @@
     <script>
         const pwd = document.getElementById('passwordInput');
         const toggle = document.getElementById('togglePassword');
+
+        const confirmPwd = document.getElementById('confirmPasswordInput');
+        const confirmToggle = document.getElementById('confirmTogglePassword');
+
         toggle.addEventListener('click', () => {
             const show = pwd.type === 'password';
             pwd.type = show ? 'text' : 'password';
-            toggle.innerHTML = show ? '<i class="bi bi-eye-slash"></i>' : '<i class="bi bi-eye"></i>';
+            toggle.innerHTML = show
+                ? '<i class="bi bi-eye-slash"></i>'
+                : '<i class="bi bi-eye"></i>';
+        });
+
+        confirmToggle.addEventListener('click', () => {
+            const show = confirmPwd.type === 'password';
+            confirmPwd.type = show ? 'text' : 'password';
+            confirmToggle.innerHTML = show
+                ? '<i class="bi bi-eye-slash"></i>'
+                : '<i class="bi bi-eye"></i>';
         });
 
         const fill = document.getElementById('strengthFill');

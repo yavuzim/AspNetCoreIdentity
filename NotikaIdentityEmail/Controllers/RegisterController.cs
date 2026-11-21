@@ -9,10 +9,10 @@ namespace NotikaIdentityEmail.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
 
-        //public RegisterController(UserManager<AppUser> userManager)
-        //{
-        //    _userManager = userManager;
-        //}
+        public RegisterController(UserManager<AppUser> userManager)
+        {
+            _userManager = userManager;
+        }
 
         [HttpGet]
         public IActionResult CreateUser()
@@ -22,6 +22,9 @@ namespace NotikaIdentityEmail.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(RegisterUserViewModel model)
         {
+            if (!ModelState.IsValid) 
+                return View(model);
+
             AppUser appUser = new AppUser();
             appUser.Name = model.Name;
             appUser.Surname = model.Surname;
@@ -32,11 +35,11 @@ namespace NotikaIdentityEmail.Controllers
             var result = await _userManager.CreateAsync(appUser, model.Password);
             if (result.Succeeded)
                 return RedirectToAction("UserLogin", "Login");
-            else
-                foreach (var item in result.Errors)
-                {
-                    ModelState.AddModelError("", item.Description);
-                }
+
+            foreach (var item in result.Errors)
+            {
+                ModelState.AddModelError("", item.Description);
+            }
             return View();
         }
     }
