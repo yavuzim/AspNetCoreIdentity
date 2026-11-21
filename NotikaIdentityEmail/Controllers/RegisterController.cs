@@ -9,10 +9,10 @@ namespace NotikaIdentityEmail.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
 
-        public RegisterController(UserManager<AppUser> userManager)
-        {
-            _userManager = userManager;
-        }
+        //public RegisterController(UserManager<AppUser> userManager)
+        //{
+        //    _userManager = userManager;
+        //}
 
         [HttpGet]
         public IActionResult CreateUser()
