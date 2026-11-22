@@ -1,10 +1,11 @@
-﻿@model RegisterUserViewModel
+﻿
+@model RegisterUserViewModel
 @{
     Layout = null;
 }
 
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -22,8 +23,8 @@
     <div class="register-card">
         <div class="register-header">
             <div class="logo"><i class="bi bi-envelope-paper-heart"></i></div>
-            <h1>Hesap Oluştur</h1>
-            <p>Notika'ya katılın, e-postalarınızı yönetmeye başlayın.</p>
+            <h1>Create Account</h1>
+            <p>Join Notika and start managing your emails.</p>
         </div>
 
         <div class="register-body">
@@ -33,43 +34,43 @@
 
                 <div class="row g-3">
                     <div class="col-sm-6">
-                        <label asp-for="Name" class="form-label">Ad</label>
+                        <label asp-for="Name" class="form-label">First Name</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-person"></i></span>
-                            <input asp-for="Name" class="form-control" placeholder="Adınız" autocomplete="given-name" />
+                            <input asp-for="Name" class="form-control" placeholder="Enter your first name" autocomplete="given-name" />
                         </div>
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
 
                     <div class="col-sm-6">
-                        <label asp-for="Surname" class="form-label">Soyad</label>
+                        <label asp-for="Surname" class="form-label">Last Name</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-person"></i></span>
-                            <input asp-for="Surname" class="form-control" placeholder="Soyadınız" autocomplete="family-name" />
+                            <input asp-for="Surname" class="form-control" placeholder="Enter your last name" autocomplete="family-name" />
                         </div>
                         <span asp-validation-for="Surname" class="text-danger"></span>
                     </div>
 
                     <div class="col-12">
-                        <label asp-for="Username" class="form-label">Kullanıcı Adı</label>
+                        <label asp-for="Username" class="form-label">Username</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-at"></i></span>
-                            <input asp-for="Username" class="form-control" placeholder="kullanici_adi" autocomplete="username" />
+                            <input asp-for="Username" class="form-control" placeholder="username" autocomplete="username" />
                         </div>
                         <span asp-validation-for="Username" class="text-danger"></span>
                     </div>
 
                     <div class="col-12">
-                        <label asp-for="Email" class="form-label">E-posta</label>
+                        <label asp-for="Email" class="form-label">Email Address</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                            <input asp-for="Email" type="email" class="form-control" placeholder="ornek@mail.com" autocomplete="email" />
+                            <input asp-for="Email" type="email" class="form-control" placeholder="example@mail.com" autocomplete="email" />
                         </div>
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
 
                     <div class="col-12">
-                        <label asp-for="Password" class="form-label">Şifre</label>
+                        <label asp-for="Password" class="form-label">Password</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-lock"></i></span>
                             <input asp-for="Password" type="password" class="form-control" id="passwordInput"
@@ -78,14 +79,15 @@
                                 <i class="bi bi-eye"></i>
                             </button>
                         </div>
-                       
+
                         <div class="strength-bar"><span id="strengthFill"></span></div>
-                        <div class="strength-text" id="strengthText">Şifre gücü</div>
+                        <div class="strength-text" id="strengthText">Password Strength</div>
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-12">                   
-                    <label asp-for="ConfirmPassword" class="form-label">Şifre Tekrar</label>
+
+                <div class="col-12">
+                    <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-lock"></i></span>
                         <input asp-for="ConfirmPassword" type="password" class="form-control" id="confirmPasswordInput"
@@ -93,18 +95,19 @@
                         <button type="button" class="btn toggle-password" id="confirmTogglePassword" tabindex="-1">
                             <i class="bi bi-eye"></i>
                         </button>
-                    </div>   
+                    </div>
                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>
+
                 <button type="submit" class="btn btn-register w-100 mt-4">
-                    <i class="bi bi-person-plus me-1"></i> Kayıt Ol
+                    <i class="bi bi-person-plus me-1"></i> Sign Up
                 </button>
             </form>
         </div>
 
         <div class="register-footer">
-            Zaten hesabınız var mı?
-            <a asp-controller="Login" asp-action="Index">Giriş Yap</a>
+            Already have an account?
+            <a asp-controller="Login" asp-action="Index">Sign In</a>
         </div>
     </div>
 
@@ -135,6 +138,7 @@
 
         const fill = document.getElementById('strengthFill');
         const text = document.getElementById('strengthText');
+
         pwd.addEventListener('input', () => {
             const v = pwd.value;
             let score = 0;
@@ -145,13 +149,14 @@
             if (/[^A-Za-z0-9]/.test(v)) score++;
 
             const levels = [
-                { w: '0%', c: '#e5e7eb', t: 'Şifre gücü' },
-                { w: '25%', c: '#ef4444', t: 'Çok zayıf' },
-                { w: '45%', c: '#f97316', t: 'Zayıf' },
-                { w: '65%', c: '#eab308', t: 'Orta' },
-                { w: '85%', c: '#22c55e', t: 'Güçlü' },
-                { w: '100%', c: '#00c292', t: 'Çok güçlü' }
+                { w: '0%', c: '#e5e7eb', t: 'Password Strength' },
+                { w: '25%', c: '#ef4444', t: 'Very Weak' },
+                { w: '45%', c: '#f97316', t: 'Weak' },
+                { w: '65%', c: '#eab308', t: 'Fair' },
+                { w: '85%', c: '#22c55e', t: 'Strong' },
+                { w: '100%', c: '#00c292', t: 'Very Strong' }
             ];
+
             const l = v.length === 0 ? levels[0] : levels[Math.max(1, score)];
             fill.style.width = l.w;
             fill.style.background = l.c;
@@ -160,4 +165,3 @@
     </script>
 </body>
 </html>
-
