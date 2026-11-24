@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NotikaIdentityEmail.Context;
 using NotikaIdentityEmail.Entities;
 using NotikaIdentityEmail.Models;
 
@@ -8,10 +9,12 @@ namespace NotikaIdentityEmail.Controllers
     public class LoginController : Controller
     {
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly EmailContext _context;
 
-        public LoginController(SignInManager<AppUser> signInManager)
+        public LoginController(SignInManager<AppUser> signInManager, EmailContext context)
         {
             _signInManager = signInManager;
+            _context = context;
         }
 
         [HttpGet]
@@ -22,12 +25,34 @@ namespace NotikaIdentityEmail.Controllers
         [HttpPost]
         public async Task<IActionResult> UserLogin(UserLoginViewModel model)
         {
-            var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, true, true);
-            if (result.Succeeded)
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = _context.Users.FirstOrDefault(x => x.UserName == model.Username);
+
+            if (user == null)
             {
-                return RedirectToAction("Profile", "MyProfile");
+                ModelState.AddModelError("", "Invalid username or password.");
+                return View(model);
             }
-            return View();
+
+            if (!user.EmailConfirmed)
+            {
+                ModelState.AddModelError("", "Your e-mail address is not verified yet. Please enter the activation code we sent to your e-mail.");
+                return View(model);
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, true, true);
+
+            if (result.Succeeded)
+                return RedirectToAction("Profile", "MyProfile");
+
+            if (result.IsLockedOut)
+                ModelState.AddModelError("", "Your account is temporarily locked due to too many failed attempts. Please try again later.");
+            else
+                ModelState.AddModelError("", "Invalid username or password.");
+
+            return View(model);
         }
     }
 }
