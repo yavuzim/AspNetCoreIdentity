@@ -11,3 +11,4 @@
 | Microsoft.EntityFrameworkCore.SqlServer | 9.0.4 |
 | Microsoft.EntityFrameworkCore.Tools | 9.0.4 |
 | Microsoft.VisualStudio.Web.CodeGeneration.Design | 9.0.12 |
+NETCore.MailKit | 2.1.0 |
