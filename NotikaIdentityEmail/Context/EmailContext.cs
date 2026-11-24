@@ -9,5 +9,7 @@ namespace NotikaIdentityEmail.Context
         public EmailContext(DbContextOptions<EmailContext> options) : base(options)
         {
         }
+        public DbSet<Category>Categories { get; set; }
+        public DbSet<Message> Messages{ get; set; }
     }
 }
