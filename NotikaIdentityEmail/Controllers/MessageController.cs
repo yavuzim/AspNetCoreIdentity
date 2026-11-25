@@ -1,30 +1,57 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using NotikaIdentityEmail.Context;
+using NotikaIdentityEmail.Entities;
+using NotikaIdentityEmail.Models;
 
 namespace NotikaIdentityEmail.Controllers
 {
     public class MessageController : Controller
     {
         private readonly EmailContext _context;
+        private readonly UserManager<AppUser> _userManager;
 
-        public MessageController(EmailContext context)
+        public MessageController(EmailContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        public IActionResult Inbox()
+        public async Task<IActionResult> Inbox()
         {
-            var values = _context.Messages.Where(x=>x.ReceiverEmail== "kemal@gmail.com").ToList();
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+          var values = (from m in _context.Messages
+                        join u in _context.Users
+                        on m.SenderEmail equals u.Email into userGroup
+                        from sender in userGroup.DefaultIfEmpty()
+
+                        join c in _context.Categories 
+                        on m.CategoryId equals c.CategoryId into categoryGroup
+                        from category in categoryGroup.DefaultIfEmpty()
+
+                        where m.ReceiverEmail==user.Email
+                        select new MessageWithSenderInfoViewModel
+                        {
+                            MessageId = m.MessageId,
+                            MessageDetail = m.MessageDetail,
+                            Subject = m.Subject,
+                            SendDate = m.SendDate,
+                            SenderEmail = m.SenderEmail,
+                            SenderName = sender !=null ? sender.Name : "Unknown",
+                            SenderSurname = sender != null ? sender.Surname : "User",
+                            CategoryName = category!=null ? category.CategoryName : "Unknown Category",
+                        }).ToList();
             return View(values);
         }
-        public IActionResult Sendbox()
+        public async Task<IActionResult> Sendbox()
         {
-            var values = _context.Messages.Where(x => x.SenderEmail == "kemal@gmail.com").ToList();
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var values = _context.Messages.Where(x => x.SenderEmail == user.Email).ToList();
             return View(values);
         }
         public IActionResult MessageDetail()
         {
-            var value = _context.Messages.Where(x=>x.MessageId==1).FirstOrDefault();
+            var value = _context.Messages.Where(x => x.MessageId == 1).FirstOrDefault();
             return View(value);
         }
 

@@ -1,4 +1,4 @@
-﻿@model List<Message>
+﻿@model List<MessageWithSenderInfoViewModel>
 @{
     ViewData["Title"] = "Inbox";
     Layout = "~/Views/UserLayout/Index.cshtml";
@@ -14,7 +14,7 @@
                 <div class="inbox-text-list sm-res-mg-t-30">
                     <div class="form-group">
                         <div class="nk-int-st search-input search-overt">
-                            <input type="text" class="form-control" placeholder="Search email..." />
+                            <input type="text" class="form-control" placeholder="Enter the words to search for...." />
                             <button class="btn search-ib">Search</button>
                         </div>
                     </div>
@@ -53,20 +53,61 @@
                     {
                         <div class="table-responsive">
                             <table class="table table-hover table-inbox">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Sender</th>
+                                    <th>Subject</th>
+                                    <th>Category</th>
+                                    <th>Date</th>
+                                </tr>
                                 <tbody>
                                     @foreach (var item in Model)
                                     {
                                         var detail = item.MessageDetail ?? "";
                                         var preview = detail.Length > 40 ? detail.Substring(0, 30) + "..." : detail;
 
+                                        var categoryColors = new Dictionary<string, string>
+                                                            {
+                                            { "Travel", "danger" },
+                                            { "Education", "primary" },
+                                            { "Social", "success" },
+                                            { "Finance", "warning" },
+                                            { "Campaigns", "info" }
+                                        };
+
+                                        var color = categoryColors.ContainsKey(item.CategoryName)
+                                            ? categoryColors[item.CategoryName]
+                                            : "default";
+
                                         <tr>
-                                            <td class="">
-                                                <label><input type="checkbox" class="i-checks"></label>
+                                            <td>
+                                                <label>
+                                                    <input type="checkbox" class="i-checks">
+                                                </label>
                                             </td>
-                                            <td><a href="#">Sender</a> <span class="label label-warning">@item.CategoryId</span></td>
-                                            <td><a href="#"><strong>Subject: @item.Subject</strong> @preview</a></td>
-                                            <td></td>
-                                            <td class="text-right mail-date">@item.SendDate.ToShortDateString()</td>
+
+                                            <td>
+                                                <a href="#">@item.SenderName</a>
+                                            </td>
+
+                                            <td>
+                                                <a href="#">@item.Subject</a>
+                                            </td>
+
+                                            <td>
+                                                <a href="#">
+                                                    <span class="label label-@color">
+                                                        @item.CategoryName
+                                                    </span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="#">
+                                                    <span class="text-right mail-date">
+                                                        @item.SendDate.ToString("dd MMM yyyy", System.Globalization.CultureInfo.GetCultureInfo("en-US"))
+                                                    </span>
+                                                </a>
+                                            </td>
                                         </tr>
                                     }
                                 </tbody>
