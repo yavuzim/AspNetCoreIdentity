@@ -45,7 +45,7 @@ namespace NotikaIdentityEmail.Controllers
             var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, true, true);
 
             if (result.Succeeded)
-                return RedirectToAction("Profile", "MyProfile");
+                return RedirectToAction("EditProfile", "Profile");
 
             if (result.IsLockedOut)
                 ModelState.AddModelError("", "Your account is temporarily locked due to too many failed attempts. Please try again later.");
