@@ -1,4 +1,4 @@
-﻿@model Message
+﻿@model MessageWithSenderInfoViewModel
 @{
     ViewData["Title"] = "MessageDetail";
     Layout = "~/Views/UserLayout/Index.cshtml";
@@ -15,16 +15,42 @@
                             <h2>Email view</h2>
                         </div>
                         <div class="view-ml-rl">
-                            <p>08:26 PM (2 hours ago)</p>
+                            @{
+                                var timeDifference = DateTime.Now - Model.SendDate;
+
+                                var days = (int)timeDifference.TotalDays;
+                                var hours = timeDifference.Hours;
+                            }
+
+                            <p>
+                                @if (days > 0)
+                                {
+                                    @($"{days} days {hours} hours ago")
+                                }
+                                else if (hours > 0)
+                                {
+                                    @($"{hours} hours ago")
+                                }
+                                else if (timeDifference.Minutes > 0)
+                                {
+                                    @($"{timeDifference.Minutes} minutes ago")
+                                }
+                                else
+                                {
+                                    @("Just now")
+                                }
+                            </p>
                         </div>
                     </div>
                     <div class="mail-ads mail-vw-ph">
                         <p class="first-ph"><b>Subject: </b>@Model.Subject</p>
+                        <p class="first-ph"><b>Category: </b>@Model.CategoryName</p>
+                        <p class="first-ph"><b>Sender: </b>@Model.SenderName @Model.SenderSurname</p>
                         <p><b>Email:</b> <a href="#">@Model.SenderEmail</a></p>
-                        <p class="last-ph"><b>Date:</b> @Model.SendDate</p>
+                        <p class="last-ph"><b>Date:</b> @Model.SendDate.ToString("dd MMMM yyyy") - @Model.SendDate.ToString("HH:MM")</p>
                     </div>
                     <div class="view-mail-atn">
-                        <p>@Model.MessageDetail</p>
+                        <p>@Html.Raw(@Model.MessageDetail)</p>
                     </div>
                     <div class="vw-ml-action-ls text-right mg-t-20">
                         <div class="btn-group ib-btn-gp active-hook nk-email-inbox">

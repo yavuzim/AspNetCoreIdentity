@@ -63,11 +63,11 @@
                                 <tbody>
                                     @foreach (var item in Model)
                                     {
-                                        var detail = item.MessageDetail ?? "";
-                                        var preview = detail.Length > 40 ? detail.Substring(0, 30) + "..." : detail;
+                                        var subject = item.Subject ?? "";
+                                        var preview = subject.Length > 40 ? subject.Substring(0, 30) + "..." : subject;
 
                                         var categoryColors = new Dictionary<string, string>
-                                                            {
+                                                                                                                                                                {
                                             { "Travel", "danger" },
                                             { "Education", "primary" },
                                             { "Social", "success" },
@@ -87,28 +87,28 @@
                                             </td>
 
                                             <td>
-                                                <a href="#">@item.SenderName</a>
+                                                <a href="/Message/MessageDetail/@item.MessageId">@(item.IsRead ? item.SenderName : Html.Raw($"<strong>{item.SenderName}</strong>"))</a>
                                             </td>
 
                                             <td>
-                                                <a href="#">@item.Subject</a>
+                                                <a href="/Message/MessageDetail/@item.MessageId">@(item.IsRead ? preview : Html.Raw($"<strong>{preview}</strong>"))</a>
                                             </td>
 
                                             <td>
-                                                <a href="#">
+                                                <a href="/Message/MessageDetail/@item.MessageId">
                                                     <span class="label label-@color">
                                                         @item.CategoryName
                                                     </span>
                                                 </a>
                                             </td>
+
                                             <td>
-                                                <a href="#">
-                                                    <span class="text-right mail-date">
-                                                        @item.SendDate.ToString("dd MMM yyyy", System.Globalization.CultureInfo.GetCultureInfo("en-US"))
-                                                    </span>
-                                                </a>
+                                                <span class="text-right mail-date">
+                                                    @(item.IsRead ? @item.SendDate.ToString("dd MMM yyyy", System.Globalization.CultureInfo.GetCultureInfo("en-US")) : Html.Raw($"<strong>{item.SendDate.ToString("dd MMM yyyy", System.Globalization.CultureInfo.GetCultureInfo("en-US"))}</strong>"))
+                                                </span>
                                             </td>
                                         </tr>
+
                                     }
                                 </tbody>
                             </table>

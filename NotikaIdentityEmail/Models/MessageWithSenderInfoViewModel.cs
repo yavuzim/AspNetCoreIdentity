@@ -10,5 +10,6 @@
         public string SenderName { get; set; }
         public string SenderSurname { get; set; }
         public string CategoryName { get; set; }
+        public bool IsRead { get; set; }
     }
 }
