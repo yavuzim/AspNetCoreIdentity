@@ -12,6 +12,13 @@
 
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                 <div class="inbox-text-list sm-res-mg-t-30">
+                    <div class="row" style="margin-bottom: 15px;">
+                        <div class="col-md-12 text-right">
+                            <span class="label label-primary" style="font-size: 13px; padding: 8px 12px;">
+                                Total Messages: @(((int)ViewBag.TotalMessageCount).ToString("N0"))
+                            </span>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <div class="nk-int-st search-input search-overt">
                             <input type="text" class="form-control" placeholder="Enter the words to search for...." />
@@ -67,7 +74,7 @@
                                         var preview = subject.Length > 40 ? subject.Substring(0, 30) + "..." : subject;
 
                                         var categoryColors = new Dictionary<string, string>
-                                                                                                                                                                {
+                                                                                                                                                                                    {
                                             { "Travel", "danger" },
                                             { "Education", "primary" },
                                             { "Social", "success" },

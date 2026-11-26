@@ -5,15 +5,24 @@
         </div>
         <div class="inbox-status">
             <ul class="inbox-st-nav inbox-ft">
-                <li><a href="#"><i class="notika-icon notika-mail"></i> Inbox<span class="pull-right">0</span></a></li>
-                <li><a href="#"><i class="notika-icon notika-sent"></i> Sent</a></li>
+                <li>
+                    <a href="/Message/Inbox/" class="@(ViewBag.receiverMessageCount > 0 ? "inbox-bold" : "")">
+                        <i class="notika-icon notika-mail"></i> Inbox
+
+                        @if (ViewBag.receiverMessageCount > 0)
+                        {
+                            <span class="pull-right">@ViewBag.receiverMessageCount</span>
+                        }
+                    </a>
+                </li>
+                <li><a href="/Message/Sendbox/"><i class="notika-icon notika-sent"></i> Sent</a></li>
                 <li><a href="#"><i class="notika-icon notika-draft"></i> Draft</a></li>
                 <li><a href="#"><i class="notika-icon notika-trash"></i> Trash</a></li>
             </ul>
         </div>
         <hr>
         @await Component.InvokeAsync("_MessageCategoryListSidebarComponentPartial")
-        
+
         <hr>
         <div class="inbox-status">
             <ul class="inbox-st-nav inbox-nav-mg">

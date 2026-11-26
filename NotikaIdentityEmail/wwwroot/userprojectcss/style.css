@@ -2718,7 +2718,7 @@ ol, ul {
 /*----------------------------------------*/
 /*  30.  Inbox CSS
 /*----------------------------------------*/
-.inbox-status ul.inbox-st-nav.inbox-ft li:first-child {
+.inbox-bold {
     font-weight: 700;
 }
 
